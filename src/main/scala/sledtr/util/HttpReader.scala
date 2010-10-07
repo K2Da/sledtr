@@ -24,8 +24,12 @@ object HttpReader {
     val buf: Array[Byte] = new Array[Byte](4096)
     var i: Int = 0
   
-    while(i * buf.size <= ba.size && !ud.isDone()) {
-      Array.copy(ba, i, buf, 0, buf.size)
+    while(i * buf.size <= ba.size && !ud.isDone) {
+      if((i + 1) * buf.size > ba.size)
+        Array.copy(ba, i, buf, 0, ba.size - buf.size * i)
+      else
+        Array.copy(ba, i, buf, 0, buf.size)
+        
       ud.handleData(buf, 0, buf.size)
       i = i + 1
     }

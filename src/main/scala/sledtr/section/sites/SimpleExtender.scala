@@ -1,5 +1,5 @@
-package sledtr.formatter.sites
-import sledtr.formatter._
+package sledtr.section.sites
+import sledtr.section._
 import sledtr._
 import sledtr.shelf._
 import sledtr.MyPreDef._
@@ -8,9 +8,9 @@ import scala.collection.mutable._
 import net.htmlparser.jericho._
 import scala.util.matching._
 
-object SimpleExtender extends FormatterCompanion {
-  def apply(chapter: Chapter, section: Section, map: ConfigMap): Formatter = {
-    new SimpleExtender(chapter, section, map)
+object SimpleExtender extends SectionCompanion {
+  def apply(title: String, chapter: Chapter, url_list: List[String], map: ConfigMap): Section = {
+    new SimpleExtender(title, chapter, url_list, map)
   }
   
   val sites: List[Tuple2[Regex, (Element) => Boolean]] = Collections.SimpleExtenderSites
@@ -32,11 +32,11 @@ object SimpleExtender extends FormatterCompanion {
   }
 }
 
-class SimpleExtender protected (chapter: Chapter, section: Section, map: ConfigMap)
-  extends SimpleFormatter(chapter, section, map) {
+class SimpleExtender protected (title: String, chapter: Chapter, url_list: List[String], map: ConfigMap)
+  extends SimpleSection(title, chapter, url_list, map) {
   
   override def targetElement: (Element) => Boolean = {
-    SimpleExtender.getSite(section.url) match {
+    SimpleExtender.getSite(url_list(0)) match {
       case Some(x) => x._2
       case _ => throw new Throwable("nai")
     }

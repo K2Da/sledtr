@@ -26,17 +26,40 @@ abstract class Selected(map: ConfigMap) {
   val params: Map[String, PluginParam]
  
   def initParams() = {
-    map.foreach { d =>
-      val key = d._1
+    map.foreach { case(key, value) =>
       if(params.contains(key)) {
-        d._2 match {
+        value match {
           case Value(s) => params(key) match {
             case StringParam(d) => params(key) = StringParam(Some(s))
-            case ListParam(l) => params(key) = ListParam(s :: l)
-            case _ => throw new Throwable("")
+            case ListParam(l)   => params(key) = ListParam(s :: l)
+            case _ => throw new Throwable("inner")
           }
+          
+          case ArrayValue(a) =>
+            params(key) = ListParam(a.toList.map {
+                v => v match {
+                  case Value(s) => s
+                  case _ => throw new Throwable("nest parameter")
+                }
+            } )
+            
+          case x: ConfigValue => throw new Throwable("outer : " + x.toString(0))
         }
       }
+    }
+  }
+  
+  def getStringParam(name: String): String = {
+    params(name) match {
+      case StringParam(Some(s)) => s
+      case _ => throw new Throwable("prameter keyword is not found")
+    }
+  }
+  
+  def getListParam(name: String): List[String] = {
+    params(name) match {
+      case ListParam(s) => s
+      case _ => throw new Throwable("prameter keyword is not found")
     }
   }
   

@@ -19,7 +19,7 @@ class UrlList private(chapter: Chapter, map: ConfigMap) extends Source(chapter, 
   
   override def createSection(): Unit = {
     urllist.foreach { url =>
-      sections += new Section(chapter, "title", url)
+      sections += chapter.getSection("title", url :: Nil)
     }
   }
 }

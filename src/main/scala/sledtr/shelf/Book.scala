@@ -1,6 +1,7 @@
 package sledtr.shelf
 import sledtr._
 import sledtr.util._
+import sledtr.section._
 import scala.collection.mutable.Map
 import java.io.{File}
 import sledtr.MyPreDef._

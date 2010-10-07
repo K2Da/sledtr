@@ -2,7 +2,7 @@ package sledtr.actors
 import sledtr.util._
 import sledtr.MyPreDef._
 
-class HtmlDownload(url: String, save_path: String) extends Task() {
+class HtmlDownload(val url: String, save_path: String) extends Task() {
   val save = new File(save_path)
   var source: String = _
   override def myTask(): Unit = {

@@ -1,16 +1,18 @@
-package sledtr.formatter.filter
+package sledtr.section.filter
 import org.scalatest.FunSuite
 import net.htmlparser.jericho._
+import sledtr._
 import scala.collection.JavaConversions._
 import sledtr.util._
 
 class TagTest extends FunSuite {
   test("Tag系のテスト") {
-    val s = new Source("<a src=http://img.f.hatena.ne.jp/images/fotolife/K/K2Da/20050306/20050306221525.jpg>content</a>")
+    Environ.workHome = """c:/work/tdwork"""
+    val s = new Source("<img src=http://img.f.hatena.ne.jp/images/fotolife/K/K2Da/20050306/20050306221525.jpg />")
     val sb = new StringBuffer()
     IMG.getHtml("", s.getAllElements()(0), sb)
     
-    val p = """<img src='.*'>content</img>"""
+    val p = """<img src='.*' />"""
     assert(p.r.findFirstIn(sb.toString) match {
       case Some(s) => true
       case _ => false

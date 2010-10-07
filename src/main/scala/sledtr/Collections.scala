@@ -1,6 +1,9 @@
 package sledtr
+import scala.collection.mutable._
 import scala.util.matching._
 import sledtr.source._
+import sledtr.section._
+import sledtr.section.sites._
 import net.htmlparser.jericho._
 
 object Collections {
@@ -18,11 +21,21 @@ object Collections {
       
   val SourceList: List[SourceCompanion] = 
     List(
+      Ch2,
       UrlList,
       DefaultSource,
       RssFeed
     )
   
+  val SectionList: List[SectionCompanion] = 
+    List(
+      Ch2Section,
+      SimpleExtender,
+      IgnSection,
+      SimpleSection,
+      DefaultSection
+    )
+    
   val DivNames: List[String] =
     List(
         "CONTENTS_MAIN",

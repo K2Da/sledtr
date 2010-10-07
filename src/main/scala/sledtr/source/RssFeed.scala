@@ -5,7 +5,6 @@ import sledtr.shelf._
 import sledtr.MyPreDef._
 import sledtr.config._
 import sledtr._
-import scala.util.matching._
 import scala.xml._
 import sledtr.plugin._
 
@@ -15,10 +14,7 @@ class RssFeed private(chapter: Chapter, map: ConfigMap) extends Source(chapter, 
       )
   initParams()
   
-  val url = params("url") match {
-      case StringParam(Some(s)) => s
-      case _ => throw new Throwable()
-    }
+  val url = getStringParam("url")
   
   lazy val down_load = new HtmlDownload(url, Environ.srcDir + "/" + url.p)
   
@@ -27,7 +23,7 @@ class RssFeed private(chapter: Chapter, map: ConfigMap) extends Source(chapter, 
   override def createSection(): Unit = {
     val xml = XML.loadString(down_load.source)
     (xml \\ "item").foreach { n =>
-      sections += new Section(chapter, (n \ "title").text, (n \ "link").text)
+      sections += chapter.getSection((n \ "title").text, (n \ "link").text :: Nil)
     }
   }
 }

@@ -1,6 +1,6 @@
 package sledtr.shelf
 import sledtr.source._
-import sledtr.formatter._
+import sledtr.section._
 import scala.collection.mutable.Map
 import sledtr.MyPreDef._
 import sledtr.util._
@@ -9,7 +9,7 @@ class Chapter(book: Book, map: ConfigMap) {
   val title = map.value("title")
   val source = Source.create(this, map.mapValue("source"))
   def sections = source.sections
-  def getFormatter(section: Section) = Formatter.create(this, section, map.mapValue("formatter"))
+  def getSection(title: String, url_list: List[String]) = Section.create(title, this, url_list, map.mapValue("section"))
   def readSource() = source.readSource()
   def createSection() =     try {
       source.createSection()
@@ -18,7 +18,7 @@ class Chapter(book: Book, map: ConfigMap) {
          e.printStackTrace
          log(e)
     }
-  override def toString = title + "\n  " + source.toString + "\n  " + map.mapValue("formatter")
+  override def toString = title + "\n  " + source.toString + "\n  " + map.mapValue("section")
 }
 
 object Chapter {

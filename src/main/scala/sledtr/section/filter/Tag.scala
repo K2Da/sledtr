@@ -1,4 +1,4 @@
-package sledtr.formatter.filter
+package sledtr.section.filter
 import net.htmlparser.jericho._
 import scala.collection.JavaConversions._
 import sledtr.MyPreDef._

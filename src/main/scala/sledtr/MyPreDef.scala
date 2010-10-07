@@ -2,6 +2,7 @@ package sledtr
 import sledtr.util._
 import sledtr.config._
 import sledtr.shelf._
+import sledtr.section._
 import scala.collection.mutable.Map
 
 object MyPreDef {

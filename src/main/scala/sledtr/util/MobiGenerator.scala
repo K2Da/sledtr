@@ -2,6 +2,7 @@ package sledtr.util
 import sledtr.MyPreDef._
 import sledtr.shelf._
 import sledtr._
+import sledtr.section._
 import sledtr.actors._
 
 abstract class MobiOutput {
@@ -22,8 +23,8 @@ class OutputHtml extends MobiOutput {
   }
   
   override def inSection(s: Section, n: Int, m: Int) = {
-    sb.a("<h2 id=%s>%d-%d. %s</h3>".format(s.url.p, n + 1, m + 1, s.title))
-    sb.a("<p>%s</p>".format(s.url))
+    sb.a("<h2 id=%s>%d-%d. %s</h3>".format(s.url_list(0).p, n + 1, m + 1, s.title))
+    sb.a("<p>%s</p>".format(s.url_list))
     sb.a(s.formatHtml)
     sb.a("<mbp:pagebreak />")
   }
@@ -43,7 +44,7 @@ class HtmlToc extends MobiOutput {
   }
   
   override def inSection(s: Section, n: Int, m: Int) =
-    sb.a("<li><a href=#%s>%d-%d. %s</a></li>".format(s.url.p, n + 1, m + 1, s.title))
+    sb.a("<li><a href=#%s>%d-%d. %s</a></li>".format(s.url_list(0).p, n + 1, m + 1, s.title))
   
   override def endChapter() = sb.a("</ul>")
   
@@ -58,16 +59,16 @@ class Ncx extends MobiOutput {
     sb.a(MobiGenerator.createNavi(c.title, c.title.p))
   
   override def inSection(s: Section, n: Int, m: Int) =
-    sb.a(MobiGenerator.createNavi(s.title, s.url.p))
+    sb.a(MobiGenerator.createNavi(s.title, s.url_list(0).p))
 }
 
 class CheckText extends MobiOutput {
   override def inSection(s: Section, n: Int, m: Int) = {
     sb.a("===== " + s.title + " =====")
-    sb.a(s.url)
-    import sledtr.formatter._
-    s.formatter match {
-      case f: SimpleFormatter =>
+    s.url_list.foreach { u => sb.a(u) }
+    import sledtr.section._
+    s match {
+      case f: SimpleSection =>
         sb.a(filter.HtmlInfo.check(f.src, f.findMaybeTarget))
       case _ =>
     }

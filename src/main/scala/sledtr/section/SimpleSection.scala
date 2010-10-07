@@ -1,24 +1,24 @@
-package sledtr.formatter
+package sledtr.section
+import net.htmlparser.jericho._
+import scala.collection.JavaConversions._
+import scala.collection.mutable._
 import sledtr._
+import sledtr.MyPreDef._
+import sledtr.actors._
+import sledtr.section.filter._
+import sledtr.plugin._
 import sledtr.shelf._
 import sledtr.util._
-import sledtr.MyPreDef._
-import sledtr.formatter.filter._
-import sledtr.actors._
-import sledtr.plugin._
-import net.htmlparser.jericho._
-import scala.collection.mutable._
-import scala.collection.JavaConversions._
 
-object SimpleFormatter extends FormatterCompanion {
-  def apply(chapter: Chapter, section: Section, map: ConfigMap): Formatter = {
-    new SimpleFormatter(chapter, section, map)
+object SimpleSection extends SectionCompanion {
+  def apply(title: String, chapter: Chapter, url_list: List[String], map: ConfigMap): Section = {
+    new SimpleSection(title, chapter, url_list, map)
   }
   override def canFormat(url: String): Boolean = true
 }
 
-class SimpleFormatter protected(chapter: Chapter, section: Section, map: ConfigMap)
-  extends Formatter(chapter, section, map) {
+class SimpleSection protected(title: String, chapter: Chapter, url_list: List[String], map: ConfigMap)
+  extends Section(title, chapter, url_list, map) {
   val params: Map[String, PluginParam] = Map()
   
   lazy val src: Source = new Source(down_load.source)
@@ -32,7 +32,7 @@ class SimpleFormatter protected(chapter: Chapter, section: Section, map: ConfigM
     }
   }
   
-  lazy val down_load = new HtmlDownload(section.url, Environ.srcDir + "/" + section.url.p)
+  lazy val down_load = new HtmlDownload(url_list(0), Environ.srcDir + "/" + url_list(0).p)
   
   override def readSource(): Unit = SectionDownloadManager.addTask(down_load)
   
@@ -40,9 +40,9 @@ class SimpleFormatter protected(chapter: Chapter, section: Section, map: ConfigM
     val sb = new StringBuffer
     
     if(targetElement != null)
-      DefaultTag.getHtml(section.url, cutHtml(), sb)
+      DefaultTag.getHtml(url_list(0), cutHtml(), sb)
     else
-      DefaultTag.getHtml(section.url, findMaybeTarget, sb)
+      DefaultTag.getHtml(url_list(0), findMaybeTarget, sb)
       
     sb.toString
   }

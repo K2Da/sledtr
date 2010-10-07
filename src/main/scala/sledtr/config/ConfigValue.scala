@@ -41,17 +41,17 @@ abstract class ConfigValue {
 }
 
 case class ArrayValue(value: ConfigArray) extends ConfigValue {
-  def toString(n: Int): String = {
+  override def toString(n: Int): String = {
     value.map(_.toString(n + 1)).reduceRight { (x, y) => x + y} 
   }
 }
 case class Value(value: String) extends ConfigValue {
-  def toString(n: Int): String = {
+  override def toString(n: Int): String = {
     " : %s\n".format(value)
   }
 }
 case class MapValue(value: ConfigMap) extends ConfigValue {
-  def toString(n: Int): String = {
+  override def toString(n: Int): String = {
     val kv = value.map ( x => {
         val v = x._2 match {
           case MapValue(_)   => "\n" + x._2.toString(n + 3)

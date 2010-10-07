@@ -1,4 +1,4 @@
-package sledtr.formatter.filter
+package sledtr.section.filter
 import net.htmlparser.jericho._
 import scala.collection.JavaConversions._
 import sledtr.MyPreDef._
@@ -12,10 +12,10 @@ object IMG extends Tag {
       case Some(s) =>
         val ap = makeAbsolutePath(url, s.getValue)
         makeLocalFileName(ap) match {
-          case Some(s) =>
-            val d = new ImageDownload(ap, s)
+          case Some(path) =>
+            val d = new ImageDownload(ap, path)
             ImageDownloadManager.addTask(d)
-            sb.append("<img src='%s' />".format(s.getAbsolutePath))
+            sb.append("<img src='%s' />".format(path.getAbsolutePath))
           case None =>
         }
 

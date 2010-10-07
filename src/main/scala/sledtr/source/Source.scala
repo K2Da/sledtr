@@ -1,6 +1,7 @@
 package sledtr.source
 import sledtr.shelf._
 import sledtr._
+import sledtr.section._
 import scala.collection.mutable._
 import sledtr.MyPreDef._
 import sledtr.plugin._
